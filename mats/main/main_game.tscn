@@ -1,0 +1,133 @@
+[gd_scene load_steps=5 format=3 uid="uid://bdcxyi01im11m"]
+
+[ext_resource type="Script" path="res://mats/main/main_game.gd" id="1_dcjit"]
+[ext_resource type="PackedScene" uid="uid://dvmde1fg3ltch" path="res://mats/objects/player/player.tscn" id="2_6empj"]
+[ext_resource type="PackedScene" uid="uid://do6ekr4ebxv6w" path="res://mats/lvls/lvl1.tscn" id="2_ajpvd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_btdsw"]
+resource_local_to_scene = true
+size = Vector2(5, 500)
+
+[node name="main" type="Node2D"]
+editor_description = "layers:
+-1 : background
+0 : map
+1 : characters
+"
+script = ExtResource("1_dcjit")
+
+[node name="cam" type="Camera2D" parent="."]
+position = Vector2(690, 580)
+zoom = Vector2(0.7, 0.7)
+process_callback = 0
+position_smoothing_enabled = true
+position_smoothing_speed = 7.5
+
+[node name="world" type="Node2D" parent="."]
+
+[node name="lvl1" parent="world" instance=ExtResource("2_ajpvd")]
+
+[node name="l1" type="Line2D" parent="."]
+points = PackedVector2Array(-185, 80, -185, 579)
+width = 2.0
+default_color = Color(0.807843, 0, 0.34902, 1)
+
+[node name="l2" type="Line2D" parent="."]
+points = PackedVector2Array(260, 80, 260, 579)
+width = 2.0
+default_color = Color(0.807843, 0, 0.34902, 1)
+
+[node name="player" parent="." instance=ExtResource("2_6empj")]
+position = Vector2(690, 580)
+
+[node name="c" parent="player/pistol/laser/hirtbox" index="1"]
+shape = SubResource("RectangleShape2D_btdsw")
+
+[node name="rt" type="RemoteTransform2D" parent="player"]
+remote_path = NodePath("../../cam")
+
+[node name="cl" type="CanvasLayer" parent="."]
+
+[node name="ui" type="Control" parent="cl"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="stats" type="VBoxContainer" parent="cl/ui"]
+layout_mode = 2
+offset_top = 240.0
+offset_right = 180.0
+offset_bottom = 292.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="hp" type="ProgressBar" parent="cl/ui/stats"]
+self_modulate = Color(0.541176, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+value = 50.0
+show_percentage = false
+
+[node name="t" type="RichTextLabel" parent="cl/ui/stats/hp"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 6.0
+offset_top = -12.5
+offset_right = 46.0
+offset_bottom = 12.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "250"
+scroll_active = false
+
+[node name="str" type="ProgressBar" parent="cl/ui/stats"]
+visible = false
+self_modulate = Color(0, 0.541176, 0, 1)
+layout_mode = 2
+size_flags_vertical = 3
+value = 50.0
+show_percentage = false
+
+[node name="t" type="RichTextLabel" parent="cl/ui/stats/str"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 6.0
+offset_top = -12.5
+offset_right = 46.0
+offset_bottom = 12.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "250"
+scroll_active = false
+
+[node name="е" type="RichTextLabel" parent="cl/ui"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -147.5
+offset_right = 147.5
+offset_bottom = 72.0
+grow_horizontal = 2
+text = "Незабывай о том, что это всего лишь демонстрация воможностей, даже не demo"
+scroll_active = false
+
+[connection signal="h_ch" from="player/hurt_box" to="." method="player_health_changed"]
+[connection signal="m_h_ch" from="player/hurt_box" to="." method="player_max_health_changed"]
+
+[editable path="player"]
+[editable path="player/hurt_box"]
+[editable path="player/pistol"]
